@@ -9,10 +9,11 @@
    
 ## 1. Basic Concepts
 
-- indexing 은 더 빠르게 원하는 데이터를 찾기 위해 사용된다.
+* indexing 은 더 빠르게 원하는 데이터를 찾기 위해 사용된다.
 
-<details>
+* <details>
   <summary>더보기</summary>
+
   - 도서관의 책 인덱싱, 책의 목차와 같은 방식이다.
   - 인덱스 없다면 겨우 약간의 데이터를 찾기 위해서 전 데이터를 싹 훑어야 한다.
 </details>
