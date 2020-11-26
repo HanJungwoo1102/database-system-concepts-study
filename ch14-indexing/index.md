@@ -25,5 +25,5 @@
 
 [link1]: #user-content-1-basic-concepts
 [link2]: #user-content-2-ordered-indicies
-[link3]: #user-content-3-b+-tree-index-files
-[link4]: #user-content-4-b+-tree-extensions
+[link3]: #user-content-3-b-tree-index-files
+[link4]: #user-content-4-b-tree-extensions
