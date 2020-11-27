@@ -11,8 +11,7 @@
 
 * indexing 은 더 빠르게 원하는 데이터를 찾기 위해 사용된다.
 
-* <details>
-  <summary>더보기</summary>
+* <details><summary>더보기</summary>
 
   - 도서관의 책 인덱싱, 책의 목차와 같은 방식이다.
   - 인덱스 없다면 겨우 약간의 데이터를 찾기 위해서 전 데이터를 싹 훑어야 한다.
@@ -31,7 +30,58 @@
 
 ## 2. Ordered Indicies
 
+* 정렬된 상태의 인덱스 구조로 저장하는 방법.
+  
+* <details><summary>Dense and Sparse Indices</summary>
+
+  - Dense index
+  
+  - Sparse index
+</details>
+
+* <details><summary>Multilevel Indices</summary>
+
+</details>
+
+* <details><summary>Index Update</summary>
+
+</details>
+
+* <details><summary>Secondary Indices</summary>
+
+</details>
+
+* <details><summary>Indices on Multiple keys</summary>
+
+</details>
+
 ## 3. B+ Tree Index Files
+
+* <details><summary>b+ tree</summary>
+  
+  - index sequential file 은 파일이 커지면 커질 수록 degrade 된다.
+  - 파일을 재구성 하면 되지만 빈번한 재구성은 좋지 못해
+  - b+ tree 구조는 인덱스 구조로 널리 쓰인다.
+  - root -> leaf 까지 모든 path 길이가 같다.
+  - insertion 과 deletion 에 performance overhead 둔다
+  - overhead 는 잦은 파일 수정 있을 때 좋다. (파일 재구성 비용 피할 수 있어서)
+  - 노드들 반은 비어있다. -> 낭비되는 공간 있다.
+  - 하지만 performance 때문에 참자
+</details>
+
+* <details><summary>Structure of a B+ Tree</summary>
+
+  - B+ tree index 는 multilevel index 이지만 index-sequential file 은 아니다.
+  - 일단 search key 중복 없다고 가정
+  - 일반적인 Node 구조: P1 | K1 | P2 | K2 ... | K(n-1) | P(n)
+  - leaf 구조: value 개수가 [(n - 1)/2] ~ (n - 1) 개 가질 수 있다. 최소 [(n - 1)/2] 개
+  - B+ Tree 가 dense index 로 사용되면 leaf node 에 모든 search key 가 다 있을 것이다.
+  - P(n) leaf node 의 n 번째 Pointer: 다음 leaf node 를 가리킨다. => sequential processing 효율적으로 하게
+  - internal node 는 multilevel index 를 형성한다.
+  - internal node 는 leaf node 와 같은데 다른 점은 leaf node 는 data 를 가리키는데 none leaf node 는 node 를 가리킨다.
+  - internal node 는 [n / 2] ~ n 개의 pointer 를 갖고 있다. leaf node 는 p(n) 때문에 다른가 보다.
+  - 
+</details>
 
 ## 4. B+ Tree Extensions
 
