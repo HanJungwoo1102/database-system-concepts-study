@@ -80,7 +80,48 @@
   - internal node 는 multilevel index 를 형성한다.
   - internal node 는 leaf node 와 같은데 다른 점은 leaf node 는 data 를 가리키는데 none leaf node 는 node 를 가리킨다.
   - internal node 는 [n / 2] ~ n 개의 pointer 를 갖고 있다. leaf node 는 p(n) 때문에 다른가 보다.
-  - 
+  - internal node 중 최상위 노드인 root node 는 [ n / 2 ] 보다 적은 pointer 가질 수 있다.
+  - 하지만 반드시 적어도 포인터 두개 이상 가져야한다. (tree node 가 한 개 일때는 어쩔 수 없지만)
+  - b+ tree 는 balance 하다. -> path length 다 같다 -> lookup, insertion. deltion 성능 굿
+  - 일반적으로 search key 는 중복됨 -> search key 나오는 만큼 leaf node 에 저장 -> internal node 에 중복된 search key 생김 -> 성능 문제
+  - 다른 방법은 각각의 search key 에 대한 pointer set 를 저장하는 방법 -> 더 복잡, 비효율적
+  - 대부분의 db 들은 search key 를 unique 하게 만들어놓는다. primary key 와 묶어서 key 를 만든다 -> 그럼 프라이멀 키 때문에 unique 해진다.
+  - 디비에서 자동적으로 extra attribute 를 내부적으로 붙인다고 한다. -> 중복을 제거하기 위해
+</details>
+
+* <details><summary>Queries on B+ Tree</summary>
+
+  - find(v)
+    1. root node 에서 시작
+    2. 노드에서 제일 작은 key 부터 비교 시작 -> v 보다 큰 애들 중에 제일 작은 애 찾기
+    3. 다음 노드로 넘어가기
+      - 다 v 보다 작아서 못 찾았다. -> P(m) m 은 last non null pointer
+      - 찾았는데 그 값이 v 랑 같다 -> P(i+1)
+      - 찾음 -> P(i)
+    4. leaf node 까지 반복
+    5. leaf node 라면 key 중에 v 랑 같은게 있으면 return P(i) 없으면 null return
+  - findRange(lb, ub)
+    1. find(lb) 랑 마지막 leaf node 구하는 데까지 로직 같다.
+    2. leaf node 찾았으면 Key 중에 lb 보다 큰 애들 중에 제일 작은 애 index 찾는다. 없으면 index 를 그 leaf node 갯수 + 1 로 설정 (다음 노드로 넘어가려고)
+    3. lb, ub 사이에 있는 key 찾기
+      - i 가 현재 leaf node 수 보다 작고 key 가 ub 보다 작으면 resultSet 에 넣고 i += 1
+      - i 가 현재 leaf node 수 보다 작은데 key 가 ub 보다 크면 다 찾은거니 끝내기
+      - i 가 현재 Leaf node 수 보다 크면 현재 leaf node 에서는 다 찾은겨. 다음 leaf 노드로 넘어가기 위해 다음 leaf node 있는지 검사하고 C = C.P(n+1) 하고 i = 1 로
+      - 그 외는 다 찾은 거니 끝내기
+    - resultSet return
+  - insert(K, P)
+    1. 넣어야 할 leaf node 찾기
+    2. leaf node 꽉 차있는지 확인
+      - 넣을 공간 있으면 넣기
+      - 꽉 차 있으면 split
+    3. split
+       1. 새 노드 만들기
+       2. 원래 노드에 있던 P(1) K(1) ... K(n-1) 을 T 에 저장해 놓기
+       3. T 에 새로 추가되는 K, P 를 맞는 위치에 넣는다.
+       4. 원래 leaf node 비운다
+       5. 원래 leaf node 에 P(1) ~ K([n / 2])
+       6. 새 leaf node 에 P([n / 2] + 1) ~ K(n)
+       7. 원래 leaf node 부모에 새 leaf node 를 붙인다. key 는 새 leaf node 에서 제일 작은 key 로
 </details>
 
 ## 4. B+ Tree Extensions
