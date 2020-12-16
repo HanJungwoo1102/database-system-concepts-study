@@ -9,55 +9,70 @@
    
 ## 1. Basic Concepts
 
-* indexing 은 더 빠르게 원하는 데이터를 찾기 위해 사용된다.
-
-* <details><summary>더보기</summary>
-
-  - 도서관의 책 인덱싱, 책의 목차와 같은 방식이다.
-  - 인덱스 없다면 겨우 약간의 데이터를 찾기 위해서 전 데이터를 싹 훑어야 한다.
-  - 인덱싱을 막 하면은 안되 부러. 여러가지 테크닉이 있는디 그 중에 맞는거 잘 써야혀
-  - 크게 indexing 하는 방법은 2가지 있다.
-    1. ordered indices: 정렬된 순서
-    2. hash indices: hash function 에 의해서 분포
-  - indexing technique 을 평가하는 5가지 요소
-    1. Access types: ?? 어떤 value 로 찾는지인가
-    2. Access time: 특정 데이터를 찾는데 걸리는 시간
-    3. Insertion time: 새 데이터 넣는데 걸리는 시간 (제 자리 찾아서 넣고 index 구조 변경하는데 까지)
-    4. Deletion time: 특정 데이터 지우고 구조 바꾸는 데까지
-    5. Space overhead: ?? index 들이 얼마나 차지하는지인가
-  - searh key: 검색할 attribute 들. 그러니까 과목 인덱싱 해 놨으면 과목이 search key 인거지
-</details>
+* 왜??
+  - 원하는 데이터를 더 빨리 찾기 위해 사용된다.
+* index file 구성 요소
+  - search key, pointer(value) 로 구성된 record (index entry) 들로 이루어져있다.
+* index file 종류
+  - index entries 가 어떻게 저장되어 있는지에 따라서 나뉜다.
+  - 종류
+    - ordered indices
+    - hash indices
+* index 평가 항목
+  - 데이터에 할 수 있는 타입이 효과적인가 (ex: point query, range query)(범위로 찾기, 값으로 찾기)
+  - access time
+  - insertion time
+  - delete time
+  - space overhead
 
 ## 2. Ordered Indicies
 
-* 정렬된 상태의 인덱스 구조로 저장하는 방법.
+* index file 안에 entry 들을 search key 로 정렬시켜놓습니다. (hash 는 정렬 X)
+* index entries 가 정렬되긴 하는데 실제 data 순서에 따라서 2가지로 나뉩니다.
+  - clustered index
+    - 데이터들의 순서대로 index entry 저장
+    - ex: 책 앞에 목차 (index 순서대로 책의 내용 전개)
+  - nonclustered index
+    - 데이터들의 순서와는 다르게 index entry 저장
+    - ex: 책 뒤에 찾아보기 (index 순서와는 다르게 책의 내용 전개)
+* ordered indices 구조들
+  * <details><summary>Dense and Sparse Indices</summary>
+
+    - Dense index
+      - file 의 모든 search key, value 에 대해서 index record 를 가지고 있다.
+      - file 의 모든 record 들에 대해서 갖고 있는게 아니었군
+    - Sparse index
+      - file 의 모든 search key, value 에 대해서 index record 갖지 않는다.
+      - 어떻게 쓰나??
+        - 접근 원하는 data 를 index entry 와 비교해서 근처 찾고 포인터 가리키는 곳 부터 시작해서 쭉 찾아간다.
+        - 그래서 data 가 순서대로 정렬된 곳에서 사용가능하다. (sequentially ordered)
+        - 어라 그냥 dense index 도 마찬가지인데 왜 모든 search key, value 에 대해서 indexing record 를 안 갖게하지??
+        - index record 의 수를 줄이고 싶어서??
+        - 뒤에 나올 multi level index 때문인듯 싶다. 상위 level 의 index file 들은 모든 search key, value 에 대해서 index record 를 갖는것은 아니니까??
+  </details>
+
+  * <details><summary>Secondary Indices</summary>
+
+    - index records, 실제 데이터 record 들의 pointer 를 담고 있는 buckets, 실제 데이터들로 구성
+    - index record 의 pointer 는 bucket 을 가리키고 bucket 의 포인터는 실제 record 을 가리킨다.
+    - bucket 들은 모든 record 들을 다 가리키고 있어야 한다.
+    - dense indices 여야 한다.
+  </details>
+
+  * <details><summary>Multilevel Indices</summary>
+
+    - data 너무 많아서 index 만들었는데 index record 들도 너무 많아진다??
+    - index 를 위한 index
+    - inner index: 그냥 basic index file
+    - outer index: inner index 에 대한 index file
+  </details>
+
+  * B+ tree Indices (다음 절에서 더 자세히)
   
-* <details><summary>Dense and Sparse Indices</summary>
-
-  - Dense index
-  
-  - Sparse index
-</details>
-
-* <details><summary>Multilevel Indices</summary>
-
-</details>
-
-* <details><summary>Index Update</summary>
-
-</details>
-
-* <details><summary>Secondary Indices</summary>
-
-</details>
-
-* <details><summary>Indices on Multiple keys</summary>
-
-</details>
 
 ## 3. B+ Tree Index Files
 
-* <details><summary>b+ tree</summary>
+* <details><summary>B+ tree</summary>
   
   - index sequential file 은 파일이 커지면 커질 수록 degrade 된다.
   - 파일을 재구성 하면 되지만 빈번한 재구성은 좋지 못해
@@ -125,6 +140,27 @@
 </details>
 
 ## 4. B+ Tree Extensions
+
+## 5. Hash Indices
+
+* hash data structure 를 이용해 index record 를 저장한다.
+
+* static hashing
+* dynamic hashing
+  - linear hashing
+  - extandable hashing
+
+* ordered index 와 비교
+
+## 6. Multiple Key Access
+
+## 7. Creation of Indices
+
+## 8. Write-Optimized Index Structures
+
+## 9. Bitmap Indices
+
+## 10. Indexing of Spatial and Temporal Data
 
 [link1]: #user-content-1-basic-concepts
 [link2]: #user-content-2-ordered-indicies
