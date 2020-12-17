@@ -145,10 +145,34 @@
 
 * hash data structure 를 이용해 index record 를 저장한다.
 
-* static hashing
+* <details><summary>static hashing</summary>
+
+  - bucket 수 정해져있다. => overflow 발생
+  - record 분포가 불균형하다.
+  - overflow handling
+    - overflow bucket (closed addressing or closed hashing)
+      - linked list 로 bucket 연결
+    - linear probing
+      - 다음 버킷 그냥 쓰기
+  - 버킷 수 많으면 disc space 낭비, 적으면 overflow 으로 인한 성능 저하
+  - solution
+    - rehashing
+      - 새 hash 함수와 파일 re-organization
+      - expensive 하고 다른 operation 방해
+    - dynamic hashing
+      - 아래서 계속
+  </details>
+
 * dynamic hashing
-  - linear hashing
-  - extandable hashing
+  - bucket 수가 동적으로 변하는 hash 구조
+  - <details><summary>linear hashing</summary>
+
+    - 
+  </details>
+  - <details><summary>extendible hashing</summary>
+
+    - 
+  </details>
 
 * ordered index 와 비교
 
